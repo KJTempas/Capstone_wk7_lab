@@ -40,11 +40,10 @@ def get_forecast(location,key):
         response = requests.get(url, params=query)
         response.raise_for_status()  #will raise an exception for 400(client) or 500(server) errors
         forecast_data = response.json() #convert the response to json 
+        logging.debug(f'response received from API and converted to JSON')
         return forecast_data, None
     
     except Exception as ex:
-        #print(ex)          #change these to logging
-        #print(response.text)
         logging.exception(f'Error requesting URL {url}')
         logging.info(ex)
         logging.info(response.text)
@@ -59,7 +58,7 @@ def show_forecast(forecast_data):
             forecast_date = datetime.fromtimestamp(timestamp)
             weather_description = forecast['weather'][0]['description']
             wind_speed = forecast['wind']['speed']
-            print(f'At {forecast_date:%m-%d-%Y %H:%M}, the temperature will be {temp:.1f}F, the windspeed will be {wind_speed:.0f} mph, and the forecast is for {weather_description}.')
+            print(f'At {forecast_date:%m-%d-%Y %H:%M}, the temperature will be {temp:.1f}F, the windspeed will be {wind_speed:.0f} mph, and the forecast is {weather_description}.')
         
     except KeyError:
         #print('This data is not in the format expected')  #change this to logging
